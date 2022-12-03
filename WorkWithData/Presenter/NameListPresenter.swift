@@ -43,7 +43,5 @@ class NameListPresenter: NameListPresenterProtocol {
         // Удаляем из массива имен, имя которое приходит к нам в функцию
         loadData()
         print(name)
-        
     }
-        
 }
