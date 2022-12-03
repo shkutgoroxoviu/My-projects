@@ -69,7 +69,7 @@ class CoreDataService {
     /// - Parameter name: имя
     func deleteCity(_ name: String) {
         let fetchRequest: NSFetchRequest<PersonCoreDataModel> = PersonCoreDataModel.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "name == %@", name)
+        fetchRequest.predicate = NSPredicate(format: "location == %@", name)
         
         do {
             let result = try context.fetch(fetchRequest)
@@ -83,5 +83,3 @@ class CoreDataService {
         }
     }
 }
-
-

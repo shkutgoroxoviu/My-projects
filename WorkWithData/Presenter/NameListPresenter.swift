@@ -12,9 +12,6 @@ protocol NameListPresenterProtocol {
    var nameList: [PersonCoreDataModel] { get }
     func appendName(_ name: String)
     func loadData()
-    /// Функция удаления имени
-    /// - Parameter name: имя, который надо удалить
-    func deleteName(at name: String)
 }
 
 class NameListPresenter: NameListPresenterProtocol {
@@ -35,13 +32,5 @@ class NameListPresenter: NameListPresenterProtocol {
     func loadData() {
         nameList = coreDataService.fetchName()
         view?.reloadData()
-        print(nameList)
-    }
-    
-    func deleteName(at name: String) {
-        coreDataService.deleteCity(name)
-        // Удаляем из массива имен, имя которое приходит к нам в функцию
-        loadData()
-        print(name)
     }
 }
