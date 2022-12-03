@@ -18,6 +18,8 @@ class NameListViewController: UIViewController, NameListViewProtocol {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.delegate = self
+        tableView.dataSource = self
         title = "\"The List\""
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         presenter?.loadData()
@@ -42,7 +44,6 @@ class NameListViewController: UIViewController, NameListViewProtocol {
         present(alert, animated: true, completion: nil)
     }
     
-    
     /// Обновить значение в таблице 
     func reloadData() {
         tableView.reloadData()
@@ -50,7 +51,7 @@ class NameListViewController: UIViewController, NameListViewProtocol {
 }
 
 
-extension NameListViewController: UITableViewDataSource {
+extension NameListViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return presenter?.nameList.count ?? 0
     }
@@ -61,8 +62,21 @@ extension NameListViewController: UITableViewDataSource {
         
         guard let person = presenter?.nameList[indexPath.row] else { return UITableViewCell() }
         cell.textLabel!.text = person.name
+        cell.selectionStyle = .none
         
         return cell
+    }
+    
+    //MARK: Delete
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            guard let model = presenter?.nameList[indexPath.row].name else { return }
+            presenter?.deleteName(at: model)
+        }
     }
 }
 
