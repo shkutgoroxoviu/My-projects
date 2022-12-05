@@ -15,6 +15,7 @@ protocol NameListPresenterProtocol {
     /// Функция удаления имени
     /// - Parameter name: имя, который надо удалить
     func deleteName(at name: String)
+    func updateName(oldName: String, newName: String)
 }
 
 class NameListPresenter: NameListPresenterProtocol {
@@ -43,5 +44,16 @@ class NameListPresenter: NameListPresenterProtocol {
         // Удаляем из массива имен, имя которое приходит к нам в функцию
         loadData()
         print(name)
+    }
+    
+    /// Функция которая заменяет текст в базе данных и добавляет в наш массив обновленную базу данных
+    /// - Parameters:
+    ///   - oldName: старый текст в базе
+    ///   - newName: новый текст в базе
+    func updateName(oldName: String, newName: String) {
+        coreDataService.update(oldName, newName: newName)
+        // Удаляем из массива имен, имя которое приходит к нам в функцию и добавляем новое
+        loadData()
+        print(newName)
     }
 }
