@@ -67,16 +67,37 @@ extension NameListViewController: UITableViewDataSource, UITableViewDelegate {
         return cell
     }
     
-    //MARK: Delete
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .delete
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+    /// Добавляет к нашим ячейкам свайпы, в которых находятся функции
+    /// - Parameters:
+    ///   - tableView: наша таблица
+    ///   - indexPath: индекс по которому мы выбираем нашу ячейку
+    /// - Returns: возвращает кнопки, которые мы реализовываем
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let changeElement = UIContextualAction(style: .normal, title: "Изменить") { (action, view, succes) in
+            let alert = UIAlertController(title: "Update name", message: "Put new name", preferredStyle: .alert)
+            let changeAction = UIAlertAction(title: "Change", style: .default) { [self] (Action: UIAlertAction!) in
+                let textField = alert.textFields![0]
+                guard let newName = textField.text else { return }
+                guard let oldName = presenter?.nameList[indexPath.row].name else { return }
+                self.presenter?.updateName(oldName: oldName, newName: newName)
+                print("Update \(newName)")
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .default, handler: nil)
+            alert.addTextField(configurationHandler: nil)
+            alert.addAction(changeAction)
+            alert.addAction(cancelAction)
+            self.present(alert, animated: true, completion: nil)
+        }
+        
+        let deleteElement = UIContextualAction(style: .normal, title: "Удалить") { [self] action, view, succes in
             guard let model = presenter?.nameList[indexPath.row].name else { return }
             presenter?.deleteName(at: model)
+            print("Deleted \(model)")
         }
+        changeElement.backgroundColor = .blue
+        deleteElement.backgroundColor = .red
+        
+        return  UISwipeActionsConfiguration(actions: [deleteElement, changeElement])
     }
 }
 

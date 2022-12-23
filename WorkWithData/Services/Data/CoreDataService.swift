@@ -12,7 +12,7 @@ import CoreData
 class CoreDataService {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    // Свойство которое позволяет работать с ManageObjec (удалять, сохранять, доставать все)
+    // Свойство которое позволяет работать с ManageObject (удалять, сохранять, доставать все)
     lazy var context = appDelegate.persistentContainer.viewContext
     
     /// Обновляет существующую модель
